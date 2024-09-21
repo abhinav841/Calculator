@@ -300,7 +300,105 @@ def result(equal=0):    # equal argument to check if to auto-correct the express
 
     except OverflowError:    # or simply except:
         v2.set('Overflow')
+ # Button functions (as in your original code)
+def one(x):
+    if x in '-(√' or v1.get() != '':
+        v1.set(v1.get() + x)
+    check()
+    if x == '%':
+        result()
 
+def nine():
+    v1.set(v1.get()[0:-1])
+    if v1.get() == '':
+        v2.set('')
+    else:
+        result()
+
+def clear():
+    v1.set('')
+    v2.set('')
+
+def add(x):
+    if v1.get()[-1:] == '0' and v1.get()[-2:-1] in '-+×÷√^()%':
+        nine()
+    v1.set(v1.get() + x)
+    check()
+    result()
+
+def equal():
+    o, a = result()
+    if o == 3:
+        v2.set('Not defined')
+    if a != '':
+        v1.set(a)
+
+def result():
+    try:
+        a = v1.get().replace(',', '')
+        if a[-1:] in '.-+×÷√^(':
+            v2.set('')
+        else:
+            v2.set(eval(a.replace('×', '*').replace('÷', '/')))  # Simple eval for demonstration
+    except ZeroDivisionError:
+        v2.set('Cannot ÷0')
+    except Exception as e:
+        v2.set('Error')
+    return 0, v1.get()
+
+# Function to handle key presses
+def key_event(event):
+    key = event.char  # Get the pressed key
+    if key in '0123456789':
+        add(key)  # Add digits
+    elif key in '+-*/':
+        if key == '*':
+            add('×')  # Map * to ×
+        elif key == '/':
+            add('÷')  # Map / to ÷
+        else:
+            add(key)
+    elif key == '\r':  # Enter key is pressed
+        equal()  # Perform calculation
+    elif key == '\b':  # Backspace key is pressed
+        nine()  # Simulate delete (backspace)
+    elif key == '.':
+        add('.')  # Add decimal
+    elif key == '%':
+        one('%')  # Add percentage
+    elif key.lower() == 'c':
+        clear()  # Clear screen
+    elif key == '(' or key == ')':
+        add(key)  # Add parentheses
+
+# Bind keyboard events
+r.bind('<Key>', key_event)
+
+Button(r,text="+",command=lambda:one('+'),width=3,height=1,bg="#666666",fg="white",font="calbri 20",relief=FLAT).place(x=20,y=105)
+Button(r,text="-",command=lambda:one('-'),width=3,height=1,bg="#666666",fg="white",font="calbri 20",relief=FLAT).place(x=80,y=105)
+Button(r,text="÷",command=lambda:one('÷'),width=3,height=1,bg="#666666",fg="white",font="calbri 20",relief=FLAT).place(x=140,y=105)
+Button(r,text="×",command=lambda:one('×'),width=3,height=1,bg="#666666",fg="white",font="calbri 20",relief=FLAT).place(x=200,y=105)
+Button(r,text="(",command=lambda:one('('),width=3,height=1,bg="#666666",fg="white",font="calbri 20",relief=FLAT).place(x=200,y=163)
+Button(r,text=")",command=lambda:one(')'),width=3,height=1,bg="#666666",fg="white",font="calbri 20",relief=FLAT).place(x=200,y=221)
+Button(r,text="^",command=lambda:one('^'),width=3,height=1,bg="#666666",fg="white",font="calbri 20",relief=FLAT).place(x=200,y=279)
+Button(r,text="√",command=lambda:one('√'),width=3,height=1,bg="#666666",fg="white",font="calbri 20",relief=FLAT).place(x=200,y=337)
+Button(r,text=".",command=dec,width=3,height=1,bg="#444444",fg="white",font="calbri 20",relief=FLAT).place(x=140,y=337)
+Button(r,text="<<",command=nine,width=3,height=1,bg="#444444",fg="white",font="calbri 20",relief=FLAT).place(x=20,y=337)
+Button(r,text="=",command=equal,width=3,height=1,bg="#666666",fg="white",font="calbri 20",relief=FLAT).place(x=200,y=395)
+Button(r,text="C",command=clear,width=3,height=1,bg="#666666",fg="white",font="calbri 20",relief=FLAT).place(x=20,y=395)
+Button(r,text="7",command=lambda:add('7'),width=3,height=1,bg="#444444",fg="white",font="calbri 20",relief=FLAT).place(x=20,y=163)
+Button(r,text="8",command=lambda:add('8'),width=3,height=1,bg="#444444",fg="white",font="calbri 20",relief=FLAT).place(x=80,y=163)
+Button(r,text="9",command=lambda:add('9'),width=3,height=1,bg="#444444",fg="white",font="calbri 20",relief=FLAT).place(x=140,y=163)
+Button(r,text="4",command=lambda:add('4'),width=3,height=1,bg="#444444",fg="white",font="calbri 20",relief=FLAT).place(x=20,y=221)
+Button(r,text="5",command=lambda:add('5'),width=3,height=1,bg="#444444",fg="white",font="calbri 20",relief=FLAT).place(x=80,y=221)
+Button(r,text="6",command=lambda:add('6'),width=3,height=1,bg="#444444",fg="white",font="calbri 20",relief=FLAT).place(x=140,y=221)
+Button(r,text="1",command=lambda:add('1'),width=3,height=1,bg="#444444",fg="white",font="calbri 20",relief=FLAT).place(x=20,y=279)
+Button(r,text="2",command=lambda:add('2'),width=3,height=1,bg="#444444",fg="white",font="calbri 20",relief=FLAT).place(x=80,y=279)
+Button(r,text="3",command=lambda:add('3'),width=3,height=1,bg="#444444",fg="white",font="calbri 20",relief=FLAT).place(x=140,y=279)
+Button(r,text="0",command=lambda:add('0'),width=3,height=1,bg="#444444",fg="white",font="calbri 20",relief=FLAT).place(x=80,y=337)
+Button(r,text="00",command=lambda:(add('0'),add('0')),width=3,height=1,bg="#666666",fg="white",font="calbri 20",relief=FLAT).place(x=80,y=395)
+Button(r,text="%",command=lambda:one('%'),width=3,height=1,bg="#666666",fg="white",font="calbri 20",relief=FLAT).place(x=140,y=395)
+r.mainloop()
 
 Button(r,text="+",command=lambda:operator('+'),width=3,height=1,bg="#666666",fg="white",font="calbri 20",relief=FLAT).place(x=20,y=105)
 Button(r,text="-",command=lambda:operator('-'),width=3,height=1,bg="#666666",fg="white",font="calbri 20",relief=FLAT).place(x=80,y=105)
