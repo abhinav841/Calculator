@@ -15,10 +15,8 @@ Although it gets rounded off and what you see is **5**, you can check it as:
            
 1. (√5×√5 - 5) doesn't give 0 in Microsoft Calculator
 2. 1/(√11×√11 - 11) results in calculation timeout instead of zero division error in Realme Calculator
+3. 1/(((√2)^(√2))^(√2)-2) doesn't give ComplexInfinity Error in MathDa as it gives in a 1÷0 case
 
 This was only to give you an idea of what we are aiming at.
 
-Scientific Calculators do simplify the expression and I have not found any inaccuracy in them till now.
-
-Inaccuracy in rational decimals is easy to get rid of by handling them as fractions.
-So the real quest for us is handling irrationals!
+Inaccuracy in rational decimals is easy to get rid of by handling them as fractions. The real quest is handling irrationals!
