@@ -7,9 +7,9 @@ class Rational:
     '''A basic implementation of rational numbers
 
        Rational() -> 0 / 1
-       Rational(int:a) -> rational a / 1
+       Rational(int or str:a) -> rational a / 1
        Rational(int:a, int:b) -> rational a / b
-       Rational(float:a) -> rational equivalent of a
+       Rational(float or str:a) -> rational equivalent of a
 
        Note: power operation is implemented only for integer
        '''
@@ -19,14 +19,14 @@ class Rational:
     def __init__(self, num = 0, den = None):
         if den == 0:
             raise ZeroDivisionError("denominator cannot be zero")
-        if den != None and (isinstance(num, (float, Rational)) or not isinstance(den, int)) or not isinstance(num, (int, float, Rational)):
-            raise ValueError("only int arguments or a float argument")
+        if den != None and (isinstance(num, (str, float, Rational)) or not isinstance(den, int)) or not isinstance(num, (int, float, str, Rational)):
+            raise ValueError("only int arguments or a float or a string argument")
         if den == None: den = 1
         if num:
             if isinstance(num, Rational):
                 num, den = num._num, num._den
-            elif isinstance(num, float):
-                if num in (float('inf'), float('-inf'), float('nan')):
+            elif isinstance(num, (float, str)):
+                if float(num) in (float('inf'), float('-inf'), float('nan')):
                     raise ValueError("can't set non-real values")
                 num, den = self._fromfloat(num)
             sign_num = 1 if num>=0 else -1
@@ -187,3 +187,4 @@ class Rational:
 
     def __repr__(self):
         return f"{self._num} / {self._den}"
+        
